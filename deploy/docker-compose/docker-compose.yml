@@ -24,10 +24,21 @@ services:
     networks:
       - aastar-network    
     environment:
-      PGADMIN_DEFAULT_EMAIL: aastar@aastar.xyz
+      PGADMIN_DEFAULT_EMAIL: a@star.xyz
       PGADMIN_DEFAULT_PASSWORD: aastar
     ports:
-      - 8080:80
+      - 8088:80
+
+  relayer:
+    image: fanhousanbu/ethpaymaster-relay:0.1
+    container_name: relay
+    restart: always
+    networks:
+      - aastar-network
+    volumes:
+      - "./conf/relay-backend/:/ep/config/"
+    depends_on:
+      - pgsql
 
 networks:
   aastar-network:

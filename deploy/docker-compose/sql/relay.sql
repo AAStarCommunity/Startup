@@ -1,57 +1,61 @@
-create table public.aastar_api_key_dev
-(
-    id           integer   default nextval('paymaster_apikey_id_seq'::regclass) not null
-        constraint paymaster_apikey_pkey
-            primary key,
-    project_code varchar(50),
-    user_id      integer,
-    api_key      varchar(255),
-    key_name     varchar(255),
-    extra        json,
-    created_at   timestamp default now()                                        not null,
-    updated_at   timestamp,
-    deleted_at   timestamp,
-    disable      boolean   default false                                        not null
+-- Create sequence for paymaster_apikey_id_seq
+CREATE SEQUENCE paymaster_apikey_id_seq;
+
+-- Create table for API keys
+CREATE TABLE public.aastar_api_key_dev (
+    id           INTEGER DEFAULT nextval('paymaster_apikey_id_seq'::regclass) NOT NULL,
+    project_code VARCHAR(50),
+    user_id      INTEGER,
+    api_key      VARCHAR(255),
+    key_name     VARCHAR(255),
+    extra        JSON,
+    created_at   TIMESTAMP DEFAULT NOW() NOT NULL,
+    updated_at   TIMESTAMP,
+    deleted_at   TIMESTAMP,
+    disable      BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT paymaster_apikey_pkey PRIMARY KEY (id)
 );
 
-alter table public.aastar_api_key_dev
-    owner to postgres;
 
-create index paymaster_apikey_user_id_index
-    on public.aastar_api_key_dev (user_id);
+CREATE INDEX paymaster_apikey_user_id_index
+    ON public.aastar_api_key_dev (user_id);
 
+-- Create sequence for paymaster_strategy_id_seq
+CREATE SEQUENCE paymaster_strategy_id_seq;
 
-
-
-
-create table public.aastar_strategy_dev (
-  id integer primary key not null default nextval('paymaster_strategy_id_seq'::regclass),
-  strategy_code character varying(255),
-  project_code character varying(255),
-  user_id integer,
-  execute_restriction json not null default '{}'::json,
-  extra json,
-  strategy_name character varying(255) not null,
-  created_at timestamp without time zone not null default now(),
-  updated_at timestamp without time zone not null default now(),
-  status character varying(20) not null default 'disable',
-  description character varying(500),
-  deleted_at timestamp without time zone
+-- Create table for strategies
+CREATE TABLE public.aastar_strategy_dev (
+    id                INTEGER PRIMARY KEY NOT NULL DEFAULT nextval('paymaster_strategy_id_seq'::regclass),
+    strategy_code     VARCHAR(255),
+    project_code      VARCHAR(255),
+    user_id           INTEGER,
+    execute_restriction JSON NOT NULL DEFAULT '{}'::JSON,
+    extra             JSON,
+    strategy_name     VARCHAR(255) NOT NULL,
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    status            VARCHAR(20) NOT NULL DEFAULT 'disable',
+    description       VARCHAR(500),
+    deleted_at        TIMESTAMP WITHOUT TIME ZONE
 );
-create unique index paymaster_strategy_pk on aastar_strategy_dev using btree (strategy_code);
-create index idx_user_id on aastar_strategy_dev using btree (user_id);
 
+CREATE UNIQUE INDEX paymaster_strategy_pk ON aastar_strategy_dev USING BTREE (strategy_code);
+CREATE INDEX idx_user_id ON aastar_strategy_dev USING BTREE (user_id);
 
-create table public.aastar_user_dev (
-  id integer primary key not null default nextval('aastar_user_dev_id_seq'::regclass),
-  created_at timestamp without time zone not null default now(),
-  updated_at timestamp without time zone not null default now(),
-  deleted_at timestamp without time zone,
-  email character varying(255),
-  password character varying(255),
-  github_id integer,
-  github_avatar_url character varying(255),
-  github_name character varying(255),
-  github_login character varying(255),
-  extra json
+-- Create sequence for aastar_user_dev_id_seq
+CREATE SEQUENCE aastar_user_dev_id_seq;
+
+-- Create table for users
+CREATE TABLE public.aastar_user_dev (
+    id                INTEGER PRIMARY KEY NOT NULL DEFAULT nextval('aastar_user_dev_id_seq'::regclass),
+    created_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at        TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    deleted_at        TIMESTAMP WITHOUT TIME ZONE,
+    email             VARCHAR(255),
+    password          VARCHAR(255),
+    github_id         INTEGER,
+    github_avatar_url VARCHAR(255),
+    github_name       VARCHAR(255),
+    github_login      VARCHAR(255),
+    extra             JSON
 );
