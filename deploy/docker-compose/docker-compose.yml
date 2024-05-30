@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  pgsql:
+    image: postgres
+    container_name: pgsql
+    restart: always
+    volumes:
+      - "./conf/pgsql:/etc/postgresql"
+      - ./sql/relay.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - aastar-network
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: aastar
+
+  adminer:
+    image: dpage/pgadmin4:2024-05-27-1
+    container_name: pgadmin4
+    restart: always
+    networks:
+      - aastar-network    
+    environment:
+      PGADMIN_DEFAULT_EMAIL: a@star.xyz
+      PGADMIN_DEFAULT_PASSWORD: aastar
+    ports:
+      - 8088:80
+
+  relayer:
+    image: fanhousanbu/ethpaymaster-relay:0.1
+    container_name: relay
+    restart: always
+    networks:
+      - aastar-network
+    volumes:
+      - "./conf/relay-backend/:/ep/config/"
+    depends_on:
+      - pgsql
+
+networks:
+  aastar-network:
+    driver: bridge
