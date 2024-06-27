@@ -15,7 +15,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: aastar
+      POSTGRES_PASSWORD: <YOUR-DB-PASSWORD>
 
   adminer:
     image: dpage/pgadmin4:2024-05-27-1
@@ -24,8 +24,8 @@ services:
     networks:
       - aastar-network    
     environment:
-      PGADMIN_DEFAULT_EMAIL: a@star.xyz
-      PGADMIN_DEFAULT_PASSWORD: aastar
+      PGADMIN_DEFAULT_EMAIL: <YOUR-PGADMIN-EMAIL>
+      PGADMIN_DEFAULT_PASSWORD: <YOUR-PGADMIN-PASSWORD>
     ports:
       - 8088:80
 
